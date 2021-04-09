@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  flask:
+    build: .
+    command: flask run --host=0.0.0.0
+    container_name: flask-tutorial
+    tty: true
+    stdin_open: true
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    env_file: ./.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - flask-network
+
+  flask-worker:
+    image: flask-tutorial_flask:latest
+    command: python worker.py
+    container_name: flask-worker
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/app
+    env_file: ./.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - flask-network
+
+  db:
+    image: postgres:11.5-alpine
+    container_name: flask-db
+    tty: true
+    volumes:
+      - .data/.pgdata:/var/lib/postgresql/data
+    env_file: ./.env
+    ports:
+      - 5435:5432
+    networks:
+      - flask-network
+
+  redis:
+    image: redis:alpine
+    container_name: flask-redis
+    tty: true
+    volumes:
+      - ./.data/.redisdata:/data
+    ports:
+      - 6379:6379
+    networks:
+      - flask-network
+
+networks:
+  flask-network:
+    driver: bridge

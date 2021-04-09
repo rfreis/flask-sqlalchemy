@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="WordcountApp">
+  <head>
+    <title>Wordcount</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+      .container {
+        max-width: 1000px;
+      }
+    </style>
+  </head>
+  <body ng-controller="WordcountController">
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-5 col-sm-offset-1">
+            <h1>{{ title }}</h1>
+            <br>
+            <form role="form" ng-submit="getResults()">
+              <div class="form-group">
+                <input type="text" name="url" class="form-control" id="url-box" placeholder="Enter URL..." style="max-width: 300px;" ng-model="url" required>
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+          </div>
+          <div class="col-sm-5 col-sm-offset-1">
+            <h2>Frequencies</h2>
+            <br>
+            <div id="results">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Word</th>
+                      <th>Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% raw %}
+                    <tr ng-repeat="element in wordcounts">
+              
+                      <td>{{ element[0] }}</td>
+                      <td>{{ element[1] }}</td>
+              
+                    </tr>
+                  {% endraw %}
+                  </tbody>
+                </table>
+              </div>
+          </div>
+        </div>
+      </div>
+    <br><br>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
